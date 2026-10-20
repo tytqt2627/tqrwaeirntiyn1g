@@ -34,44 +34,43 @@
 
     <!-- Header -->
     <header class="bg-indigo-600 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-4xl mx-auto px-4 py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
-            <div>
-                <h1 class="text-xl sm:text-2xl font-bold flex items-center gap-2">
-                    <span>🧠</span> 問答隊題庫特訓系統
+        <div class="max-w-4xl mx-auto px-4 py-3 sm:py-4 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3">
+            <div class="min-w-0">
+                <h1 class="text-lg sm:text-2xl font-bold flex items-center gap-2 truncate">
+                    <span>🧠</span> <span class="truncate">問答隊題庫特訓系統</span>
                 </h1>
-                <p id="active-competition-badge" class="text-xs text-indigo-100 font-medium mt-1 hidden">
+                <p id="active-competition-badge" class="text-xs text-indigo-100 font-medium mt-0.5 truncate hidden">
                     📌 正在練習的是：<span id="current-comp-name" class="font-bold underline decoration-amber-400 decoration-2">未定</span>
                 </p>
             </div>
-            <div id="nav-buttons" class="flex gap-2 shrink-0">
-                <button id="nav-quiz-btn" class="text-xs sm:text-sm bg-indigo-700 hover:bg-indigo-800 text-white font-medium py-1.5 px-3 rounded-lg transition">
+            <div id="nav-buttons" class="flex flex-wrap gap-2 shrink-0">
+                <button id="nav-quiz-btn" class="text-xs sm:text-sm bg-indigo-700 hover:bg-indigo-800 active:bg-indigo-900 text-white font-medium py-1.5 px-2.5 sm:px-3 rounded-lg transition">
                     📝 開始特訓
                 </button>
-                <button id="nav-wrong-btn" class="text-xs sm:text-sm bg-indigo-500 hover:bg-indigo-700 text-white font-medium py-1.5 px-3 rounded-lg transition flex items-center gap-1">
+                <button id="nav-wrong-btn" class="text-xs sm:text-sm bg-indigo-500 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium py-1.5 px-2.5 sm:px-3 rounded-lg transition flex items-center gap-1">
                     📕 錯題冊 (<span id="wrong-count-badge">0</span>)
                 </button>
             </div>
-            <span id="quiz-status-badge" class="bg-amber-500 text-white text-xs px-3 py-1 rounded-full font-bold hidden shrink-0">
-                🔒 特訓進行中 (鎖定中)
+            <span id="quiz-status-badge" class="bg-amber-500 text-white text-xs px-3 py-1 rounded-full font-bold hidden self-start sm:self-auto shrink-0">
+                🔒 特訓進行中
             </span>
         </div>
     </header>
 
     <!-- Main Content Container -->
-    <main class="max-w-4xl mx-auto w-full px-4 py-8 flex-grow">
+    <main class="max-w-4xl mx-auto w-full px-3 sm:px-4 py-4 sm:py-8 flex-grow">
 
         <!-- 1. 檔案匯入與設定區域 -->
-        <section id="setup-section" class="bg-white rounded-2xl shadow-md p-6 sm:p-8 animate-fade-in">
-            <h2 class="text-xl font-bold text-gray-800 border-b pb-3 mb-6">📥 步驟 1：載入 JSON 題庫</h2>
+        <section id="setup-section" class="bg-white rounded-2xl shadow-md p-4 sm:p-8 animate-fade-in">
+            <h2 class="text-lg sm:text-xl font-bold text-gray-800 border-b pb-3 mb-4 sm:mb-6">📥 步驟 1：載入 JSON 題庫</h2>
             
-            <!-- 上傳區域 (完美相容 iPad/iOS) -->
-            <div id="drop-zone" class="border-2 border-dashed border-indigo-300 rounded-xl p-8 text-center bg-indigo-50/50 hover:bg-indigo-50 mb-4 flex flex-col items-center justify-center">
-                <div class="text-4xl mb-3">📄</div>
-                <p class="text-base font-semibold text-indigo-900 mb-2">請選擇 JSON 檔案或拖曳至此處</p>
+            <!-- 上傳區域 (修復手機溢出與觸控相容) -->
+            <div id="drop-zone" class="border-2 border-dashed border-indigo-300 rounded-xl p-5 sm:p-8 text-center bg-indigo-50/50 hover:bg-indigo-50 mb-4 flex flex-col items-center justify-center">
+                <div class="text-3xl sm:text-4xl mb-2 sm:mb-3">📄</div>
+                <p class="text-sm sm:text-base font-semibold text-indigo-900 mb-1">請選擇 JSON 檔案或拖曳至此處</p>
                 <p class="text-xs text-gray-500 mb-4">系統將自動以【檔名】作為比賽分類名稱</p>
                 
-                <!-- 顯式按鈕，解決 iPad 上傳無反應問題 -->
-                <label for="file-input" class="cursor-pointer bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 px-6 rounded-xl shadow transition active:scale-95 inline-flex items-center gap-2 text-sm">
+                <label for="file-input" class="w-full sm:w-auto text-center cursor-pointer bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 sm:py-2.5 px-6 rounded-xl shadow transition inline-flex items-center justify-center gap-2 text-sm">
                     <span>📂</span> 選擇 JSON 題庫檔案
                 </label>
                 <input type="file" id="file-input" accept=".json,application/json" class="hidden">
@@ -82,33 +81,33 @@
                 <a href="https://drive.google.com/drive/folders/1U6rNiEjiEeCpSvt_eHi8OAj1pP5mlU16?usp=drive_link" 
                    target="_blank" 
                    rel="noopener noreferrer" 
-                   class="inline-flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-sm py-2.5 px-5 rounded-xl border border-indigo-200 transition shadow-sm hover:shadow">
+                   class="w-full sm:w-auto justify-center inline-flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 active:bg-indigo-200 text-indigo-700 font-bold text-xs sm:text-sm py-2.5 px-4 sm:px-5 rounded-xl border border-indigo-200 transition shadow-sm">
                     <span>📁</span> 取得題庫 JSON 檔案 (Google Drive) ➔
                 </a>
             </div>
 
             <!-- 題目數量預覽與設定 -->
             <div id="config-panel" class="hidden border-t pt-6">
-                <h2 class="text-xl font-bold text-gray-800 mb-4">⚙️ 步驟 2：特訓參數設定</h2>
+                <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4">⚙️ 步驟 2：特訓參數設定</h2>
                 
-                <div class="bg-indigo-50 rounded-xl p-4 mb-6 flex items-center justify-between">
-                    <div>
+                <div class="bg-indigo-50 rounded-xl p-4 mb-6 flex items-center justify-between gap-2">
+                    <div class="min-w-0">
                         <span class="text-xs text-indigo-500 block">自動判定比賽分類</span>
-                        <span id="loaded-comp-display" class="text-base font-bold text-indigo-900">比賽名稱</span>
+                        <span id="loaded-comp-display" class="text-sm sm:text-base font-bold text-indigo-900 truncate block">比賽名稱</span>
                     </div>
-                    <div class="text-right">
+                    <div class="text-right shrink-0">
                         <span class="text-xs text-indigo-500 block">成功讀取題數</span>
-                        <span id="total-loaded-count" class="text-lg font-bold text-indigo-600">0 題</span>
+                        <span id="total-loaded-count" class="text-base sm:text-lg font-bold text-indigo-600">0 題</span>
                     </div>
                 </div>
 
                 <!-- 📌 題目範圍選擇區塊 -->
-                <div class="bg-gray-50 rounded-xl p-5 border border-gray-200 mb-6">
+                <div class="bg-gray-50 rounded-xl p-4 sm:p-5 border border-gray-200 mb-6">
                     <h3 class="text-sm font-bold text-gray-800 mb-3 flex items-center gap-1">
                         🎯 提問題目範圍設定：
                     </h3>
                     
-                    <div class="flex flex-col sm:flex-row gap-4 mb-3">
+                    <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 mb-3">
                         <label class="inline-flex items-center gap-2 cursor-pointer">
                             <input type="radio" name="range-mode" value="all" checked class="w-4 h-4 text-indigo-600 focus:ring-indigo-500">
                             <span class="text-sm font-medium text-gray-700">全部題目</span>
@@ -119,234 +118,237 @@
                         </label>
                     </div>
 
-                    <!-- 自訂範圍的數字輸入區 (帶 iPad 友好加減鈕) -->
-                    <div id="range-inputs-box" class="hidden flex-wrap items-center gap-2 pt-2 border-t border-gray-200">
-                        <span class="text-xs font-semibold text-gray-600">從第</span>
-                        
-                        <div class="inline-flex rounded-lg border border-gray-300 bg-white overflow-hidden">
-                            <button type="button" onclick="adjustNum('range-start', -1)" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 font-bold active:bg-gray-300 text-gray-700">−</button>
-                            <input type="number" id="range-start" min="1" value="1" class="w-16 p-1 text-center font-bold text-indigo-600 outline-none">
-                            <button type="button" onclick="adjustNum('range-start', 1)" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 font-bold active:bg-gray-300 text-gray-700">+</button>
+                    <!-- 自訂範圍的數字輸入區 -->
+                    <div id="range-inputs-box" class="hidden flex-wrap items-center gap-2 pt-3 border-t border-gray-200">
+                        <div class="flex items-center gap-1">
+                            <span class="text-xs font-semibold text-gray-600">從</span>
+                            <div class="inline-flex rounded-lg border border-gray-300 bg-white overflow-hidden">
+                                <button type="button" onclick="adjustNum('range-start', -1)" class="px-2.5 py-1 bg-gray-100 active:bg-gray-300 font-bold text-gray-700">−</button>
+                                <input type="number" id="range-start" min="1" value="1" class="w-12 text-center font-bold text-indigo-600 outline-none text-sm">
+                                <button type="button" onclick="adjustNum('range-start', 1)" class="px-2.5 py-1 bg-gray-100 active:bg-gray-300 font-bold text-gray-700">+</button>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-600">題</span>
                         </div>
 
-                        <span class="text-xs font-semibold text-gray-600">題 到 第</span>
-                        
-                        <div class="inline-flex rounded-lg border border-gray-300 bg-white overflow-hidden">
-                            <button type="button" onclick="adjustNum('range-end', -1)" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 font-bold active:bg-gray-300 text-gray-700">−</button>
-                            <input type="number" id="range-end" min="1" value="1" class="w-16 p-1 text-center font-bold text-indigo-600 outline-none">
-                            <button type="button" onclick="adjustNum('range-end', 1)" class="px-2.5 py-1 bg-gray-100 hover:bg-gray-200 font-bold active:bg-gray-300 text-gray-700">+</button>
+                        <div class="flex items-center gap-1">
+                            <span class="text-xs font-semibold text-gray-600">到</span>
+                            <div class="inline-flex rounded-lg border border-gray-300 bg-white overflow-hidden">
+                                <button type="button" onclick="adjustNum('range-end', -1)" class="px-2.5 py-1 bg-gray-100 active:bg-gray-300 font-bold text-gray-700">−</button>
+                                <input type="number" id="range-end" min="1" value="1" class="w-12 text-center font-bold text-indigo-600 outline-none text-sm">
+                                <button type="button" onclick="adjustNum('range-end', 1)" class="px-2.5 py-1 bg-gray-100 active:bg-gray-300 font-bold text-gray-700">+</button>
+                            </div>
+                            <span class="text-xs font-semibold text-gray-600">題</span>
                         </div>
 
-                        <span class="text-xs font-semibold text-gray-600">題</span>
-                        <span id="range-info-tip" class="text-xs text-indigo-600 font-medium ml-auto"></span>
+                        <span id="range-info-tip" class="text-xs text-indigo-600 font-medium w-full sm:w-auto sm:ml-auto mt-1 sm:mt-0"></span>
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-8">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-6 sm:mb-8">
                     <!-- 初始題目字數限制 -->
                     <div>
-                        <label for="initial-char-limit-input" class="block text-sm font-medium text-gray-700 mb-2">
-                            初始顯示題目首字數 (0 代表顯示全部)
+                        <label for="initial-char-limit-input" class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                            初始顯示題目首字數 (0 代表全顯)
                         </label>
                         <div class="flex rounded-lg border border-gray-300 bg-white overflow-hidden">
-                            <button type="button" onclick="adjustNum('initial-char-limit-input', -1)" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 font-bold text-gray-700 active:bg-gray-300">−</button>
+                            <button type="button" onclick="adjustNum('initial-char-limit-input', -1)" class="px-3 sm:px-4 py-2 bg-gray-100 active:bg-gray-300 font-bold text-gray-700">−</button>
                             <input type="number" id="initial-char-limit-input" min="0" value="0" step="1" 
-                                   class="w-full text-center p-2.5 font-bold text-indigo-700 outline-none">
-                            <button type="button" onclick="adjustNum('initial-char-limit-input', 1)" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 font-bold text-gray-700 active:bg-gray-300">+</button>
+                                   class="w-full text-center p-2 font-bold text-indigo-700 outline-none text-sm sm:text-base">
+                            <button type="button" onclick="adjustNum('initial-char-limit-input', 1)" class="px-3 sm:px-4 py-2 bg-gray-100 active:bg-gray-300 font-bold text-gray-700">+</button>
                         </div>
                     </div>
 
                     <!-- 練習題數 -->
                     <div>
-                        <label for="question-count-input" class="block text-sm font-medium text-gray-700 mb-2">
-                            自選範圍內抽取的題數 (0 代表範圍內全考)
+                        <label for="question-count-input" class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
+                            範圍內抽取的題數 (0 代表全考)
                         </label>
                         <div class="flex rounded-lg border border-gray-300 bg-white overflow-hidden">
-                            <button type="button" onclick="adjustNum('question-count-input', -5)" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 font-bold text-gray-700 active:bg-gray-300">−5</button>
+                            <button type="button" onclick="adjustNum('question-count-input', -5)" class="px-3 sm:px-4 py-2 bg-gray-100 active:bg-gray-300 font-bold text-gray-700">−5</button>
                             <input type="number" id="question-count-input" min="0" value="0" placeholder="0" 
-                                   class="w-full text-center p-2.5 font-bold text-indigo-700 outline-none">
-                            <button type="button" onclick="adjustNum('question-count-input', 5)" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 font-bold text-gray-700 active:bg-gray-300">+5</button>
+                                   class="w-full text-center p-2 font-bold text-indigo-700 outline-none text-sm sm:text-base">
+                            <button type="button" onclick="adjustNum('question-count-input', 5)" class="px-3 sm:px-4 py-2 bg-gray-100 active:bg-gray-300 font-bold text-gray-700">+5</button>
                         </div>
                     </div>
 
                     <!-- 顯示選項開關 -->
                     <div class="flex items-center gap-2">
                         <input type="checkbox" id="show-options-toggle" checked class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500">
-                        <label for="show-options-toggle" class="text-sm text-gray-700 font-medium cursor-pointer">顯示參考選項 (不勾選可進行盲答練習)</label>
+                        <label for="show-options-toggle" class="text-xs sm:text-sm text-gray-700 font-medium cursor-pointer">顯示參考選項 (不勾選可進行盲答練習)</label>
                     </div>
 
                     <!-- 隨機順序 -->
                     <div class="flex items-center gap-2">
                         <input type="checkbox" id="shuffle-questions" checked class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500">
-                        <label for="shuffle-questions" class="text-sm text-gray-700 font-medium cursor-pointer">隨機打亂題目順序</label>
+                        <label for="shuffle-questions" class="text-xs sm:text-sm text-gray-700 font-medium cursor-pointer">隨機打亂題目順序</label>
                     </div>
                 </div>
 
-                <button id="start-quiz-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition text-lg">
+                <button id="start-quiz-btn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition text-base sm:text-lg">
                     🚀 開始熟悉特訓
                 </button>
             </div>
         </section>
 
         <!-- 2. 答題進行區域 -->
-        <section id="quiz-section" class="hidden bg-white rounded-2xl shadow-md p-6 sm:p-8 animate-fade-in">
-            <!-- 特訓模式提示與即時字數調整 (iPad 加減微調鈕) -->
-            <div class="flex flex-wrap justify-between items-center gap-4 mb-4 bg-indigo-50/80 p-3.5 rounded-xl border border-indigo-100">
-                <div class="flex items-center gap-2">
+        <section id="quiz-section" class="hidden bg-white rounded-2xl shadow-md p-4 sm:p-8 animate-fade-in">
+            <!-- 特訓模式提示與即時字數調整 -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 bg-indigo-50/80 p-3 sm:p-3.5 rounded-xl border border-indigo-100">
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-start">
                     <span id="quiz-round-tag" class="text-xs bg-indigo-600 text-white px-2.5 py-1 rounded-md font-bold">正式特訓</span>
-                    <span id="question-progress" class="text-sm font-bold text-indigo-900">題目 1 / 10</span>
+                    <span id="question-progress" class="text-xs sm:text-sm font-bold text-indigo-900">題目 1 / 10</span>
                 </div>
                 
-                <div class="flex items-center gap-2">
-                    <label for="live-char-limit" class="text-xs font-semibold text-indigo-900">即時調整首字數：</label>
+                <div class="flex items-center gap-2 w-full sm:w-auto justify-end border-t sm:border-t-0 pt-2 sm:pt-0 border-indigo-100">
+                    <label for="live-char-limit" class="text-xs font-semibold text-indigo-900">即時首字數：</label>
                     <div class="inline-flex rounded-lg border border-indigo-300 bg-white overflow-hidden shadow-sm">
-                        <button type="button" onclick="adjustLiveChar(-1)" class="px-2.5 py-1 bg-indigo-100 hover:bg-indigo-200 active:bg-indigo-300 font-bold text-indigo-800">−</button>
+                        <button type="button" onclick="adjustLiveChar(-1)" class="px-2.5 py-1 bg-indigo-100 active:bg-indigo-300 font-bold text-indigo-800">−</button>
                         <input type="number" id="live-char-limit" min="0" value="0" step="1" 
-                               class="w-14 px-1 py-1 text-center font-bold text-indigo-700 focus:outline-none bg-white">
-                        <button type="button" onclick="adjustLiveChar(1)" class="px-2.5 py-1 bg-indigo-100 hover:bg-indigo-200 active:bg-indigo-300 font-bold text-indigo-800">+</button>
+                               class="w-12 px-1 py-0.5 text-center font-bold text-indigo-700 focus:outline-none bg-white text-sm">
+                        <button type="button" onclick="adjustLiveChar(1)" class="px-2.5 py-1 bg-indigo-100 active:bg-indigo-300 font-bold text-indigo-800">+</button>
                     </div>
-                    <span class="text-xs text-gray-500">(0 代表全顯)</span>
+                    <span class="text-xs text-gray-500">(0全顯)</span>
                 </div>
             </div>
 
             <!-- 進度條 -->
-            <div class="w-full bg-gray-200 h-2.5 rounded-full overflow-hidden mb-6">
+            <div class="w-full bg-gray-200 h-2 rounded-full overflow-hidden mb-5">
                 <div id="progress-bar" class="bg-indigo-600 h-full transition-all duration-300" style="width: 0%"></div>
             </div>
 
             <!-- 題目內容 -->
-            <div class="mb-6 min-h-[80px]">
-                <h3 id="question-text" class="text-xl sm:text-2xl font-bold text-gray-800 leading-relaxed tracking-wide">
+            <div class="mb-5 min-h-[60px] sm:min-h-[80px]">
+                <h3 id="question-text" class="text-lg sm:text-2xl font-bold text-gray-800 leading-relaxed tracking-wide">
                     題目載入中...
                 </h3>
             </div>
 
-            <!-- 臨時顯示本題選項按鈕 (當隱藏選項模式開啟時顯示) -->
+            <!-- 臨時顯示本題選項按鈕 -->
             <div id="reveal-options-box" class="mb-4 hidden">
-                <button id="reveal-options-btn" type="button" class="w-full sm:w-auto bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 font-bold px-4 py-2 rounded-xl text-sm transition flex items-center justify-center gap-2 shadow-sm">
-                    <span>👁️</span> 顯示本題選項 (下一題會自動恢復隱藏)
+                <button id="reveal-options-btn" type="button" class="w-full bg-amber-50 hover:bg-amber-100 active:bg-amber-200 text-amber-800 border border-amber-300 font-bold px-4 py-2.5 rounded-xl text-xs sm:text-sm transition flex items-center justify-center gap-2 shadow-sm">
+                    <span>👁️</span> 顯示本題選項 (下一題自動恢復隱藏)
                 </button>
             </div>
 
             <!-- 選項列表 -->
-            <div id="options-panel" class="mb-6 bg-gray-50 p-4 rounded-xl border border-gray-200">
+            <div id="options-panel" class="mb-5 bg-gray-50 p-3.5 sm:p-4 rounded-xl border border-gray-200">
                 <p class="text-xs text-gray-400 font-semibold mb-2">【參考選項】</p>
                 <div id="options-container" class="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 </div>
             </div>
 
-            <!-- 文字答案輸入框與送出按鈕 -->
-            <div class="mb-6">
-                <label for="user-text-input" class="block text-sm font-semibold text-gray-700 mb-2">✏️ 請輸入完整文字答案：</label>
-                <div class="flex gap-3">
-                    <input type="text" id="user-text-input" placeholder="請輸入完整文字答案 (不接受單一字母如 A/B/C/D)" autocomplete="off" class="flex-1 border-2 border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl px-4 py-3 text-lg font-medium transition outline-none">
-                    <button id="submit-ans-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl transition shrink-0">
+            <!-- 文字答案輸入框與送出按鈕 (手機端改為上下垂直堆疊，解決溢出問題) -->
+            <div class="mb-5">
+                <label for="user-text-input" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">✏️ 請輸入完整文字答案：</label>
+                <div class="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
+                    <input type="text" id="user-text-input" placeholder="請輸入完整答案 (不接受單一字母如 A/B/C/D)" autocomplete="off" class="w-full border-2 border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl px-3.5 py-2.5 sm:py-3 text-base font-medium transition outline-none">
+                    <button id="submit-ans-btn" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold px-6 py-3 rounded-xl transition shrink-0 text-base">
                         確認答案
                     </button>
                 </div>
             </div>
 
             <!-- 答題結果與詳細解析 -->
-            <div id="feedback-box" class="hidden p-4 rounded-xl border mb-6 animate-fade-in">
-                <div id="feedback-status" class="text-lg font-bold mb-1"></div>
-                <p id="feedback-correct-text" class="text-sm font-medium"></p>
+            <div id="feedback-box" class="hidden p-4 rounded-xl border mb-5 animate-fade-in">
+                <div id="feedback-status" class="text-base sm:text-lg font-bold mb-1"></div>
+                <p id="feedback-correct-text" class="text-xs sm:text-sm font-medium"></p>
                 <p id="feedback-full-q" class="text-xs text-gray-500 mt-2 border-t pt-2"></p>
             </div>
 
             <!-- 底部動作按鈕 -->
-            <div class="flex justify-between items-center pt-4 border-t">
-                <span class="text-xs text-gray-400">💡 提示：按下 Enter 鍵即可快速送出答案或切換下一題</span>
-                <button id="next-btn" class="hidden bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 px-6 rounded-lg transition">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-3 pt-4 border-t">
+                <span class="text-xs text-gray-400 text-center sm:text-left order-2 sm:order-1">💡 提示：按 Enter 鍵即可快速送出或下一題</span>
+                <button id="next-btn" class="hidden w-full sm:w-auto order-1 sm:order-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-semibold py-3 sm:py-2.5 px-6 rounded-xl sm:rounded-lg transition text-base sm:text-sm">
                     下一題 ➔
                 </button>
             </div>
         </section>
 
         <!-- 3. 本輪結束 / 強制重測輪通知 Modal 區域 -->
-        <section id="result-section" class="hidden bg-white rounded-2xl shadow-md p-6 sm:p-8 animate-fade-in">
-            <div class="text-center mb-8">
-                <div id="result-badge" class="inline-block text-5xl mb-3">🏆</div>
-                <h2 id="result-heading" class="text-3xl font-extrabold text-gray-800 mb-2">特訓完成！</h2>
-                <p id="result-title" class="text-indigo-600 font-bold text-lg">答題完成</p>
+        <section id="result-section" class="hidden bg-white rounded-2xl shadow-md p-4 sm:p-8 animate-fade-in">
+            <div class="text-center mb-6 sm:mb-8">
+                <div id="result-badge" class="inline-block text-4xl sm:text-5xl mb-2 sm:mb-3">🏆</div>
+                <h2 id="result-heading" class="text-2xl sm:text-3xl font-extrabold text-gray-800 mb-1 sm:mb-2">特訓完成！</h2>
+                <p id="result-title" class="text-indigo-600 font-bold text-sm sm:text-lg">答題完成</p>
             </div>
 
             <!-- 成績統計卡片 -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
-                <div class="bg-gray-50 rounded-xl p-4 text-center border">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 mb-6 sm:mb-8">
+                <div class="bg-gray-50 rounded-xl p-3 sm:p-4 text-center border">
                     <p class="text-xs text-gray-500 mb-1">本輪總題數</p>
-                    <p id="res-total" class="text-2xl font-black text-gray-800">0</p>
+                    <p id="res-total" class="text-xl sm:text-2xl font-black text-gray-800">0</p>
                 </div>
-                <div class="bg-emerald-50 rounded-xl p-4 text-center border border-emerald-100">
+                <div class="bg-emerald-50 rounded-xl p-3 sm:p-4 text-center border border-emerald-100">
                     <p class="text-xs text-emerald-600 mb-1">答對</p>
-                    <p id="res-correct" class="text-2xl font-black text-emerald-600">0</p>
+                    <p id="res-correct" class="text-xl sm:text-2xl font-black text-emerald-600">0</p>
                 </div>
-                <div class="bg-rose-50 rounded-xl p-4 text-center border border-rose-100">
+                <div class="bg-rose-50 rounded-xl p-3 sm:p-4 text-center border border-rose-100">
                     <p class="text-xs text-rose-600 mb-1">本輪答錯</p>
-                    <p id="res-wrong" class="text-2xl font-black text-rose-600">0</p>
+                    <p id="res-wrong" class="text-xl sm:text-2xl font-black text-rose-600">0</p>
                 </div>
-                <div class="bg-indigo-50 rounded-xl p-4 text-center border border-indigo-100">
+                <div class="bg-indigo-50 rounded-xl p-3 sm:p-4 text-center border border-indigo-100">
                     <p class="text-xs text-indigo-600 mb-1">正確率</p>
-                    <p id="res-accuracy" class="text-2xl font-black text-indigo-600">0%</p>
+                    <p id="res-accuracy" class="text-xl sm:text-2xl font-black text-indigo-600">0%</p>
                 </div>
             </div>
 
             <!-- 提示動態區塊 -->
-            <div id="retest-notice-box" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-5 mb-8 text-amber-900">
-                <p class="font-bold text-base mb-1">⚠️ 檢測到您在本輪有答錯的題目！</p>
+            <div id="retest-notice-box" class="hidden bg-amber-50 border border-amber-200 rounded-xl p-4 sm:p-5 mb-6 sm:mb-8 text-amber-900">
+                <p class="font-bold text-sm sm:text-base mb-1">⚠️ 檢測到您在本輪有答錯的題目！</p>
                 <p class="text-xs text-amber-800">根據特訓規則，您必須繼續重測本輪答錯的題目，直到全部答對為止。</p>
             </div>
 
             <!-- 逐題檢討細節 -->
-            <h3 class="text-lg font-bold text-gray-800 mb-4 border-b pb-2">📋 本輪題目檢討清單</h3>
-            <div id="review-container" class="space-y-4 mb-8 max-h-80 overflow-y-auto pr-2">
+            <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-3 sm:mb-4 border-b pb-2">📋 本輪題目檢討清單</h3>
+            <div id="review-container" class="space-y-3 sm:space-y-4 mb-6 sm:mb-8 max-h-80 overflow-y-auto pr-1">
             </div>
 
             <!-- 操作按鈕 -->
-            <div class="flex flex-wrap gap-4">
-                <button id="retest-action-btn" class="hidden w-full bg-amber-600 hover:bg-amber-700 text-white font-bold py-3.5 px-6 rounded-xl transition text-lg shadow-md">
+            <div class="flex flex-wrap gap-3 sm:gap-4">
+                <button id="retest-action-btn" class="hidden w-full bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white font-bold py-3.5 px-6 rounded-xl transition text-base sm:text-lg shadow-md">
                     🔄 立即重測本輪錯題 (<span id="retest-count-tag">0</span> 題)
                 </button>
-                <button id="finish-action-btn" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-6 rounded-xl transition text-lg shadow-md">
+                <button id="finish-action-btn" class="hidden w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3.5 px-6 rounded-xl transition text-base sm:text-lg shadow-md">
                     ✨ 錯題全數清空！完成本次特訓
                 </button>
             </div>
         </section>
 
         <!-- 4. 歷史錯題冊區域 -->
-        <section id="wrong-notebook-section" class="hidden bg-white rounded-2xl shadow-md p-6 sm:p-8 animate-fade-in">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-6 gap-4">
+        <section id="wrong-notebook-section" class="hidden bg-white rounded-2xl shadow-md p-4 sm:p-8 animate-fade-in">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 mb-4 sm:mb-6 gap-3">
                 <div>
-                    <h2 class="text-xl font-bold text-gray-800 flex items-center gap-2">
+                    <h2 class="text-lg sm:text-xl font-bold text-gray-800 flex items-center gap-2">
                         <span>📕</span> 歷史錯題冊
                     </h2>
-                    <p class="text-xs text-gray-500 mt-1">獨立儲存各個比賽的錯題（依答錯率排序）</p>
+                    <p class="text-xs text-gray-500 mt-0.5">獨立儲存各個比賽的錯題（依答錯率排序）</p>
                 </div>
 
                 <!-- 比賽選單切換 -->
                 <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <label for="wrong-comp-select" class="text-xs font-bold text-gray-600 shrink-0">選擇比賽：</label>
-                    <select id="wrong-comp-select" class="border border-indigo-300 rounded-lg p-2 text-sm font-bold text-indigo-700 bg-indigo-50 focus:ring-2 focus:ring-indigo-500 flex-1 sm:w-48">
+                    <label for="wrong-comp-select" class="text-xs font-bold text-gray-600 shrink-0">比賽：</label>
+                    <select id="wrong-comp-select" class="border border-indigo-300 rounded-lg p-2 text-xs sm:text-sm font-bold text-indigo-700 bg-indigo-50 focus:ring-2 focus:ring-indigo-500 flex-1 sm:w-48">
                         <option value="">(無資料)</option>
                     </select>
                 </div>
             </div>
 
-            <div class="flex justify-between items-center mb-4">
-                <span id="wrong-comp-title" class="text-sm font-bold text-indigo-900">目前檢視：無</span>
-                <button id="clear-wrong-db-btn" class="text-xs bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 px-3 py-1.5 rounded-lg font-bold transition">
+            <div class="flex justify-between items-center mb-4 gap-2">
+                <span id="wrong-comp-title" class="text-xs sm:text-sm font-bold text-indigo-900 truncate">目前檢視：無</span>
+                <button id="clear-wrong-db-btn" class="text-xs bg-rose-50 hover:bg-rose-100 active:bg-rose-200 text-rose-600 border border-rose-200 px-2.5 py-1.5 rounded-lg font-bold transition shrink-0">
                     🗑️ 清空此比賽錯題
                 </button>
             </div>
 
             <!-- 錯題列表容器 -->
-            <div id="wrong-list-container" class="space-y-4 mb-8 max-h-[500px] overflow-y-auto pr-2">
+            <div id="wrong-list-container" class="space-y-3 sm:space-y-4 mb-6 sm:mb-8 max-h-[500px] overflow-y-auto pr-1">
             </div>
 
-            <div class="flex flex-wrap gap-4">
-                <button id="start-wrong-quiz-btn" class="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-6 rounded-xl transition">
-                    🎯 開始此比賽錯題專屬特訓
+            <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                <button id="start-wrong-quiz-btn" class="w-full sm:flex-1 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 px-6 rounded-xl transition text-sm sm:text-base">
+                    🎯 開始錯題專屬特訓
                 </button>
-                <button id="back-to-setup-btn" class="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-xl transition">
+                <button id="back-to-setup-btn" class="w-full sm:flex-1 bg-gray-200 hover:bg-gray-300 active:bg-gray-400 text-gray-800 font-bold py-3 px-6 rounded-xl transition text-sm sm:text-base">
                     ⬅️ 返回特訓設定
                 </button>
             </div>
@@ -425,7 +427,7 @@
         const wrongCompSelect = document.getElementById('wrong-comp-select');
         const wrongCompTitle = document.getElementById('wrong-comp-title');
 
-        // 輔助函數：供 iPad 按鈕微調數值
+        // 輔助函數：供微調數值
         function adjustNum(inputId, delta) {
             const input = document.getElementById(inputId);
             if (!input) return;
@@ -593,7 +595,6 @@
         rangeStartInput.addEventListener('input', updateRangeTip);
         rangeEndInput.addEventListener('input', updateRangeTip);
 
-        // iPad 相容的上傳監聽事件
         fileInput.addEventListener('change', (e) => {
             if (e.target.files.length) {
                 readFile(e.target.files[0]);
@@ -713,7 +714,6 @@
 
             updateQuestionTextDisplay();
 
-            // 渲染選項與「顯示本題選項」按鈕控制
             const globalShowOptions = document.getElementById('show-options-toggle').checked;
             renderOptionsContent(q);
 
@@ -732,13 +732,12 @@
             optionsContainer.innerHTML = '';
             q.options.forEach(opt => {
                 const div = document.createElement('div');
-                div.className = 'text-sm text-gray-700 bg-white p-2.5 rounded-lg border border-gray-200 font-medium';
+                div.className = 'text-xs sm:text-sm text-gray-700 bg-white p-2.5 rounded-lg border border-gray-200 font-medium';
                 div.innerText = opt;
                 optionsContainer.appendChild(div);
             });
         }
 
-        // 點擊點亮本題選項（下一題自動恢復隱藏）
         revealOptionsBtn.addEventListener('click', () => {
             optionsPanel.classList.remove('hidden');
             revealOptionsBox.classList.add('hidden');
@@ -818,11 +817,11 @@
             feedbackBox.classList.remove('hidden', 'bg-emerald-50', 'border-emerald-200', 'bg-rose-50', 'border-rose-200');
             if (isCorrect) {
                 feedbackBox.classList.add('bg-emerald-50', 'border-emerald-200');
-                feedbackStatus.className = 'text-lg font-bold text-emerald-700';
+                feedbackStatus.className = 'text-base sm:text-lg font-bold text-emerald-700';
                 feedbackStatus.innerText = '✅ 回答正確！';
             } else {
                 feedbackBox.classList.add('bg-rose-50', 'border-rose-200');
-                feedbackStatus.className = 'text-lg font-bold text-rose-700';
+                feedbackStatus.className = 'text-base sm:text-lg font-bold text-rose-700';
                 feedbackStatus.innerText = `❌ 回答錯誤（您輸入：${inputVal}）`;
             }
 
@@ -903,11 +902,11 @@
 
             userAnswers.forEach((ans, idx) => {
                 const card = document.createElement('div');
-                card.className = `p-4 rounded-xl border ${ans.isCorrect ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/30'}`;
+                card.className = `p-3.5 sm:p-4 rounded-xl border ${ans.isCorrect ? 'border-emerald-200 bg-emerald-50/30' : 'border-rose-200 bg-rose-50/30'}`;
 
                 card.innerHTML = `
                     <div class="flex items-start justify-between gap-2 mb-2">
-                        <span class="font-bold text-gray-800 text-sm sm:text-base">${idx + 1}. ${ans.question}</span>
+                        <span class="font-bold text-gray-800 text-xs sm:text-base">${idx + 1}. ${ans.question}</span>
                         <span class="text-xs px-2 py-0.5 rounded font-bold shrink-0 ${ans.isCorrect ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
                             ${ans.isCorrect ? '正確' : '錯誤'}
                         </span>
@@ -1031,29 +1030,29 @@
             wrongItems.forEach((item, index) => {
                 const rate = item.totalAttempts > 0 ? Math.round((item.wrongAttempts / item.totalAttempts) * 100) : 0;
                 const card = document.createElement('div');
-                card.className = 'bg-white p-4 rounded-xl border border-gray-200 shadow-sm relative hover:border-indigo-300 transition';
+                card.className = 'bg-white p-3.5 sm:p-4 rounded-xl border border-gray-200 shadow-sm relative hover:border-indigo-300 transition';
 
                 const details = getAnswerDetails(item);
 
                 card.innerHTML = `
-                    <div class="flex justify-between items-start gap-3 mb-2">
-                        <div class="font-bold text-gray-800 text-sm sm:text-base">
+                    <div class="flex justify-between items-start gap-2 mb-2">
+                        <div class="font-bold text-gray-800 text-xs sm:text-base">
                             <span class="text-indigo-600 font-extrabold mr-1">#${index + 1}</span> ${item.question}
                         </div>
                         <button data-key="${item.question}" class="delete-wrong-item-btn text-xs text-gray-400 hover:text-rose-600 font-bold px-2 py-1 rounded hover:bg-rose-50 shrink-0">
                             ✖ 移除
                         </button>
                     </div>
-                    <div class="text-xs text-gray-600 mb-3 bg-gray-50 p-2.5 rounded-lg border">
+                    <div class="text-xs text-gray-600 mb-2.5 bg-gray-50 p-2 sm:p-2.5 rounded-lg border">
                         <span class="font-semibold text-emerald-700">正確答案：${details.cleanText}</span>
                         <span class="text-gray-400 ml-1">(${details.fullOptionText})</span>
                     </div>
-                    <div class="flex items-center gap-3 text-xs">
+                    <div class="flex items-center gap-2.5 text-xs">
                         <span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-bold">
                             答錯率: ${rate}%
                         </span>
                         <span class="text-gray-400">
-                            答錯 ${item.wrongAttempts} 次 / 累計計數 ${item.totalAttempts} 次
+                            答錯 ${item.wrongAttempts} 次 / 累計 ${item.totalAttempts} 次
                         </span>
                     </div>
                 `;
