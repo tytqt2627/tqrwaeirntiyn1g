@@ -64,11 +64,11 @@
         <section id="setup-section" class="bg-white rounded-2xl shadow-md p-4 sm:p-8 animate-fade-in">
             <h2 class="text-lg sm:text-xl font-bold text-gray-800 border-b pb-3 mb-4 sm:mb-6">📥 步驟 1：載入 JSON 題庫</h2>
             
-            <!-- 上傳區域 (修復手機溢出與觸控相容) -->
+            <!-- 上傳區域 -->
             <div id="drop-zone" class="border-2 border-dashed border-indigo-300 rounded-xl p-5 sm:p-8 text-center bg-indigo-50/50 hover:bg-indigo-50 mb-4 flex flex-col items-center justify-center">
                 <div class="text-3xl sm:text-4xl mb-2 sm:mb-3">📄</div>
                 <p class="text-sm sm:text-base font-semibold text-indigo-900 mb-1">請選擇 JSON 檔案或拖曳至此處</p>
-                <p class="text-xs text-gray-500 mb-4">系統將自動以【檔名】作為比賽分類名稱</p>
+                <p class="text-xs text-gray-500 mb-4">系統將自動以【檔名】作為比賽分類名稱，支援單選與多選題</p>
                 
                 <label for="file-input" class="w-full sm:w-auto text-center cursor-pointer bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 sm:py-2.5 px-6 rounded-xl shadow transition inline-flex items-center justify-center gap-2 text-sm">
                     <span>📂</span> 選擇 JSON 題庫檔案
@@ -171,9 +171,9 @@
                         </div>
                     </div>
 
-                    <!-- 顯示選項開關 -->
+                    <!-- 顯示選項開關（已修改為預設不安裝剔選） -->
                     <div class="flex items-center gap-2">
-                        <input type="checkbox" id="show-options-toggle" checked class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500">
+                        <input type="checkbox" id="show-options-toggle" class="w-4 h-4 text-indigo-600 rounded focus:ring-indigo-500">
                         <label for="show-options-toggle" class="text-xs sm:text-sm text-gray-700 font-medium cursor-pointer">顯示參考選項 (不勾選可進行盲答練習)</label>
                     </div>
 
@@ -237,22 +237,28 @@
                 </div>
             </div>
 
-            <!-- 文字答案輸入框與送出按鈕 (手機端改為上下垂直堆疊，解決溢出問題) -->
+            <!-- 文字答案輸入框與送出按鈕 -->
             <div class="mb-5">
-                <label for="user-text-input" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">✏️ 請輸入完整文字答案：</label>
+                <label for="user-text-input" class="block text-xs sm:text-sm font-semibold text-gray-700 mb-2">✏️ 請輸入完整文字答案（不接受字母如 A/B/C）：</label>
                 <div class="flex flex-col sm:flex-row gap-2.5 sm:gap-3">
-                    <input type="text" id="user-text-input" placeholder="請輸入完整答案 (不接受單一字母如 A/B/C/D)" autocomplete="off" class="w-full border-2 border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl px-3.5 py-2.5 sm:py-3 text-base font-medium transition outline-none">
+                    <input type="text" id="user-text-input" placeholder="請輸入完整文字答案 (多選題請將各答案一併輸入)" autocomplete="off" class="w-full border-2 border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 rounded-xl px-3.5 py-2.5 sm:py-3 text-base font-medium transition outline-none">
                     <button id="submit-ans-btn" class="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold px-6 py-3 rounded-xl transition shrink-0 text-base">
                         確認答案
                     </button>
                 </div>
             </div>
 
-            <!-- 答題結果與詳細解析 -->
+            <!-- 答題結果與詳細解析 (完整包含題目與 ABCD 選項) -->
             <div id="feedback-box" class="hidden p-4 rounded-xl border mb-5 animate-fade-in">
                 <div id="feedback-status" class="text-base sm:text-lg font-bold mb-1"></div>
-                <p id="feedback-correct-text" class="text-xs sm:text-sm font-medium"></p>
-                <p id="feedback-full-q" class="text-xs text-gray-500 mt-2 border-t pt-2"></p>
+                <p id="feedback-correct-text" class="text-xs sm:text-sm font-semibold text-indigo-900 mb-3"></p>
+                
+                <!-- 完整題目與所有選項展示區域 -->
+                <div class="border-t border-gray-200/80 pt-3 text-xs sm:text-sm">
+                    <p class="font-bold text-gray-700 mb-2">【完整題目解析與選項】</p>
+                    <p id="feedback-full-q" class="text-gray-800 font-medium mb-3 leading-relaxed"></p>
+                    <div id="feedback-all-options" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5"></div>
+                </div>
             </div>
 
             <!-- 底部動作按鈕 -->
@@ -356,7 +362,7 @@
     </main>
 
     <footer class="text-center py-4 text-xs text-gray-400">
-        問答隊題庫特訓系統 &copy; 保良局董玉娣中學問答隊2026
+        問答隊題庫特訓系統 &copy; 2026
     </footer>
 
     <!-- JavaScript 邏輯 -->
@@ -371,6 +377,7 @@
         let isQuizActive = false;
         let currentRoundWrongQuestions = [];
         let currentCompetitionName = "未指定比賽";
+        let defaultInitialCharLimit = 0;
 
         // DOM 元素
         const dropZone = document.getElementById('drop-zone');
@@ -414,6 +421,7 @@
         const feedbackStatus = document.getElementById('feedback-status');
         const feedbackCorrectText = document.getElementById('feedback-correct-text');
         const feedbackFullQ = document.getElementById('feedback-full-q');
+        const feedbackAllOptions = document.getElementById('feedback-all-options');
         const nextBtn = document.getElementById('next-btn');
 
         // 範圍控制 DOM
@@ -427,7 +435,7 @@
         const wrongCompSelect = document.getElementById('wrong-comp-select');
         const wrongCompTitle = document.getElementById('wrong-comp-title');
 
-        // 輔助函數：供微調數值
+        // 輔助函數：微調數字
         function adjustNum(inputId, delta) {
             const input = document.getElementById(inputId);
             if (!input) return;
@@ -448,7 +456,7 @@
             updateQuestionTextDisplay();
         }
 
-        // ================= LocalStorage 多比賽錯題庫管理 =================
+        // LocalStorage 多比賽錯題庫管理
         const STORAGE_KEY = 'QUIZ_MULTI_COMP_WRONG_DB_V3';
 
         function getMultiWrongDB() {
@@ -507,7 +515,7 @@
             }
         });
 
-        // ================= 解析 JSON 資料 =================
+        // 解析 JSON 資料
         function parseJSONData(data) {
             const parsed = [];
             try {
@@ -566,7 +574,6 @@
             configPanel.classList.remove('hidden');
         }
 
-        // ================= 題目範圍 UI 切換與提示 =================
         rangeModeRadios.forEach(radio => {
             radio.addEventListener('change', (e) => {
                 if (e.target.value === 'custom') {
@@ -622,7 +629,7 @@
             reader.readAsText(file);
         }
 
-        // ================= 開始正式特訓 =================
+        // 開始正式特訓
         startQuizBtn.addEventListener('click', () => {
             let pool = [...rawQuestions];
 
@@ -659,8 +666,8 @@
 
             setQuizLockState(true);
 
-            const initCharVal = parseInt(initialCharLimitInput.value, 10) || 0;
-            liveCharLimit.value = initCharVal < 0 ? 0 : initCharVal;
+            defaultInitialCharLimit = parseInt(initialCharLimitInput.value, 10) || 0;
+            liveCharLimit.value = defaultInitialCharLimit < 0 ? 0 : defaultInitialCharLimit;
 
             quizRoundTag.innerText = '正式特訓';
             quizRoundTag.className = 'text-xs bg-indigo-600 text-white px-2.5 py-1 rounded-md font-bold';
@@ -708,6 +715,8 @@
             submitAnsBtn.disabled = false;
             submitAnsBtn.classList.remove('opacity-50', 'cursor-not-allowed');
 
+            liveCharLimit.value = defaultInitialCharLimit;
+
             const q = activeQuestions[currentIndex];
             questionProgress.innerText = `題目 ${currentIndex + 1} / ${activeQuestions.length}`;
             progressBar.style.width = `${((currentIndex) / activeQuestions.length) * 100}%`;
@@ -745,25 +754,50 @@
 
         function getAnswerDetails(q) {
             const rawAns = String(q.rawAnswer).trim();
-            let correctIndex = -1;
+            const letters = [];
+            const cleanTexts = [];
+            const fullOptions = [];
 
-            if (/^[A-Za-z]$/.test(rawAns)) {
-                correctIndex = rawAns.toUpperCase().charCodeAt(0) - 65;
+            const matchedLetters = rawAns.toUpperCase().match(/[A-Z]/g);
+
+            if (matchedLetters && matchedLetters.length > 0) {
+                matchedLetters.forEach(char => {
+                    const idx = char.charCodeAt(0) - 65;
+                    if (idx >= 0 && idx < q.options.length) {
+                        letters.push(char);
+                        const fullOpt = q.options[idx];
+                        fullOptions.push(fullOpt);
+                        cleanTexts.push(fullOpt.replace(/^[A-Z][、\.:\s]/i, '').trim());
+                    }
+                });
             } else {
-                correctIndex = q.options.findIndex(opt => opt.startsWith(rawAns) || opt.includes(rawAns));
+                q.options.forEach((opt, idx) => {
+                    if (opt.includes(rawAns) || rawAns.includes(opt)) {
+                        letters.push(String.fromCharCode(65 + idx));
+                        fullOptions.push(opt);
+                        cleanTexts.push(opt.replace(/^[A-Z][、\.:\s]/i, '').trim());
+                    }
+                });
             }
 
-            if (correctIndex < 0 || correctIndex >= q.options.length) correctIndex = 0;
+            if (letters.length === 0 && q.options.length > 0) {
+                letters.push('A');
+                fullOptions.push(q.options[0]);
+                cleanTexts.push(q.options[0].replace(/^[A-Z][、\.:\s]/i, '').trim());
+            }
 
-            const fullOptionText = q.options[correctIndex] || '';
-            let cleanText = fullOptionText.replace(/^[A-Za-d][、\.:\s]/i, '').trim();
-            const letter = String.fromCharCode(65 + correctIndex);
-
-            return { correctIndex, letter, fullOptionText, cleanText };
+            return {
+                lettersJoin: letters.join('、'),
+                cleanTextJoin: cleanTexts.join('、'),
+                fullOptionJoin: fullOptions.join(' ； '),
+                cleanTexts,
+                fullOptions,
+                letters
+            };
         }
 
         function normalizeString(str) {
-            return str.replace(/[《》「」『』【】（）\(\)\s、，。：:；;]/g, '').toLowerCase().trim();
+            return str.replace(/[《》「」『』【】（）\(\)\s、，。：:；;,]/g, '').toLowerCase().trim();
         }
 
         function submitAnswer() {
@@ -775,26 +809,34 @@
                 return;
             }
 
+            const isPureLetters = /^[A-Za-z\s,、.]+$/.test(inputVal);
+            if (isPureLetters) {
+                alert('⚠️ 本特訓系統要求輸入「文字答案」內容，不接受僅作答英文字母（如 A/B/C）！');
+                userTextInput.focus();
+                return;
+            }
+
             canAnswer = false;
             userTextInput.disabled = true;
             submitAnsBtn.disabled = true;
             submitAnsBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
             const q = activeQuestions[currentIndex];
-            const { letter, fullOptionText, cleanText } = getAnswerDetails(q);
+            const details = getAnswerDetails(q);
 
             const normInput = normalizeString(inputVal);
-            const normClean = normalizeString(cleanText);
-            const normFull = normalizeString(fullOptionText);
-
             let isCorrect = false;
 
-            if (normInput.length > 0) {
-                if (normClean.length > 0 && (normInput === normClean || normClean.includes(normInput) || normInput.includes(normClean))) {
-                    isCorrect = true;
-                } else if (normFull.length > 0 && (normInput === normFull || normFull.includes(normInput))) {
-                    isCorrect = true;
+            let matchedCount = 0;
+            details.cleanTexts.forEach(cleanText => {
+                const normClean = normalizeString(cleanText);
+                if (normClean.length > 0 && normInput.includes(normClean)) {
+                    matchedCount++;
                 }
+            });
+
+            if (matchedCount === details.cleanTexts.length) {
+                isCorrect = true;
             }
 
             recordQuestionStats(q, isCorrect);
@@ -808,9 +850,9 @@
             userAnswers.push({
                 question: q.question,
                 userTyped: inputVal,
-                correctLetter: letter,
-                correctOption: fullOptionText,
-                cleanAnswerText: cleanText,
+                correctLetter: details.lettersJoin,
+                correctOption: details.fullOptionJoin,
+                cleanAnswerText: details.cleanTextJoin,
                 isCorrect: isCorrect
             });
 
@@ -825,8 +867,23 @@
                 feedbackStatus.innerText = `❌ 回答錯誤（您輸入：${inputVal}）`;
             }
 
-            feedbackCorrectText.innerText = `正確答案為：${cleanText} (${fullOptionText})`;
-            feedbackFullQ.innerText = `完整題目：${q.question}`;
+            feedbackCorrectText.innerText = `正確答案：${details.cleanTextJoin} (${details.lettersJoin})`;
+            feedbackFullQ.innerText = q.question;
+
+            feedbackAllOptions.innerHTML = '';
+            q.options.forEach(opt => {
+                const optDiv = document.createElement('div');
+                const isCorrectOption = details.fullOptions.includes(opt) || details.cleanTexts.some(ct => opt.includes(ct));
+
+                if (isCorrectOption) {
+                    optDiv.className = 'p-2 rounded-lg bg-emerald-100 border border-emerald-300 font-bold text-emerald-900 text-xs sm:text-sm flex items-center justify-between';
+                    optDiv.innerHTML = `<span>${opt}</span> <span class="text-xs bg-emerald-600 text-white px-1.5 py-0.5 rounded">正確答案</span>`;
+                } else {
+                    optDiv.className = 'p-2 rounded-lg bg-gray-50 border border-gray-200 text-gray-500 text-xs sm:text-sm';
+                    optDiv.innerText = opt;
+                }
+                feedbackAllOptions.appendChild(optDiv);
+            });
 
             if (currentIndex < activeQuestions.length - 1) {
                 nextBtn.innerText = '下一題 ➔';
@@ -913,7 +970,7 @@
                     </div>
                     <div class="text-xs sm:text-sm space-y-1">
                         <p class="${ans.isCorrect ? 'text-emerald-700' : 'text-rose-600'}">您的輸入：${ans.userTyped}</p>
-                        ${!ans.isCorrect ? `<p class="text-emerald-700 font-medium">正確答案：${ans.cleanAnswerText} (${ans.correctOption})</p>` : ''}
+                        ${!ans.isCorrect ? `<p class="text-emerald-700 font-medium">正確答案：${ans.cleanAnswerText} (${ans.correctLetter})</p>` : ''}
                     </div>
                 `;
                 reviewContainer.appendChild(card);
@@ -941,7 +998,7 @@
             setupSection.classList.remove('hidden');
         });
 
-        // ================= 歷史錯題冊渲染邏輯 =================
+        // 歷史錯題冊渲染邏輯
         function populateWrongCompSelect() {
             const multiDB = getMultiWrongDB();
             wrongCompSelect.innerHTML = '';
@@ -1044,8 +1101,8 @@
                         </button>
                     </div>
                     <div class="text-xs text-gray-600 mb-2.5 bg-gray-50 p-2 sm:p-2.5 rounded-lg border">
-                        <span class="font-semibold text-emerald-700">正確答案：${details.cleanText}</span>
-                        <span class="text-gray-400 ml-1">(${details.fullOptionText})</span>
+                        <span class="font-semibold text-emerald-700">正確答案：${details.cleanTextJoin}</span>
+                        <span class="text-gray-400 ml-1">(${details.lettersJoin})</span>
                     </div>
                     <div class="flex items-center gap-2.5 text-xs">
                         <span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded font-bold">
